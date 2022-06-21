@@ -7,7 +7,7 @@ class Film(models.Model):
     name             = models.CharField(max_length=100)
     release_date     = models.DateField(null=True)
     image_url        = models.URLField(null=True)
-    running_time_min = models.CharField(max_length=20)
+    running_time_min = models.CharField(max_length=20, null=True)
     descriptions     = models.CharField(max_length=500, null=True)
     rating_systems   = models.ForeignKey('RatingSystem', on_delete=models.CASCADE)
 
@@ -17,7 +17,7 @@ class Film(models.Model):
 # 일대다 관계 테이블
 
 class RatingSystem(models.Model):
-    rate = models.CharField(max_length=50)
+    rate = models.CharField(max_length=50, null=True)
 
     class Meta:
         db_table = 'rating_systems'
@@ -34,7 +34,7 @@ class Genre(models.Model):
 class Director(models.Model):
 
     name      = models.CharField(max_length=80)
-    image_url = models.URLField()
+    image_url = models.URLField(null=True)
     films = models.ManyToManyField(Film, through='FilmDirector')
 
     class Meta:
@@ -43,7 +43,7 @@ class Director(models.Model):
 class Actor(models.Model):
 
     name      = models.CharField(max_length=80)
-    image_url = models.URLField()
+    image_url = models.URLField(null=True)
     films = models.ManyToManyField(Film, through='FilmActor')
 
     class Meta:
@@ -51,7 +51,7 @@ class Actor(models.Model):
 
 class OttPlatform(models.Model):
 
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, null=True)
     films = models.ManyToManyField(Film, through='FilmOttPlatForm')
 
     class Meta:

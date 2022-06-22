@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='film',
             name='image_url',
-            field=models.URLField(),
+            field=models.URLField(default=''),
         ),
         migrations.AlterField(
             model_name='film',

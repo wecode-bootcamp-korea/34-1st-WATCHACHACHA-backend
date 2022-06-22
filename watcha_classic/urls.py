@@ -16,7 +16,4 @@ Including another URLconf
 from django.urls import path, include
 
 urlpatterns = [
-    # path('films', include('films.urls')),
-    # path('users', include('users.urls')),
-    # path('comments', include('comments.urls')),
 ]

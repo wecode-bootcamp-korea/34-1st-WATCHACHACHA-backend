@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'films',
     'users',
     'comments',
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -151,6 +152,3 @@ CORS_ALLOW_HEADERS = (
 
 #슬래시(/) 관련 에러 제거
 APPEND_SLASH = False
-
-# 사용자 지정 모델 사용
-AUTH_USER_MODEL = 'accounts.User'

@@ -1,20 +1,15 @@
-from platform import release
 from django.db import models
-
-# 영화 테이블
 
 class Film(models.Model):
     name             = models.CharField(max_length=100)
     release_date     = models.DateField()
     image_url        = models.URLField()
-    running_time_min = models.CharField(max_length=20, default='')
-    descriptions     = models.CharField(max_length=1000, default='')
-    rating_systems   = models.ForeignKey('RatingSystem', on_delete=models.CASCADE)
+    running_time_min = models.IntegerField()
+    description      = models.CharField(max_length=1000, default='')
+    rating_system    = models.ForeignKey('RatingSystem', on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'films'
-
-# 일대다 관계 테이블
 
 class RatingSystem(models.Model):
     rate = models.CharField(max_length=50, default='')
@@ -22,11 +17,9 @@ class RatingSystem(models.Model):
     class Meta:
         db_table = 'rating_systems'
 
-# 다대다 관계 테이블
-
 class Genre(models.Model):
     name  = models.CharField(max_length=50)
-    films = models.ManyToManyField(Film, through='FilmGenre')
+    film  = models.ManyToManyField(Film, through='FilmGenre', related_name='genres')
 
     class Meta:
         db_table = 'genres'
@@ -34,7 +27,7 @@ class Genre(models.Model):
 class Director(models.Model):
     name      = models.CharField(max_length=80)
     image_url = models.URLField(default='')
-    films     = models.ManyToManyField(Film, through='FilmDirector')
+    film      = models.ManyToManyField(Film, through='FilmDirector', related_name='directors')
 
     class Meta:
         db_table = 'directors'
@@ -42,26 +35,24 @@ class Director(models.Model):
 class Actor(models.Model):
     name      = models.CharField(max_length=80)
     image_url = models.URLField(default='')
-    films     = models.ManyToManyField(Film, through='FilmActor')
+    film      = models.ManyToManyField(Film, through='FilmActor', related_name='actors')
 
     class Meta:
         db_table = 'actors'
 
 class OttPlatform(models.Model):
     name  = models.CharField(max_length=50, default='')
-    films = models.ManyToManyField(Film, through='FilmOttPlatForm')
+    film  = models.ManyToManyField(Film, through='FilmOttPlatForm', related_name='ott_platforms')
 
     class Meta:
         db_table = 'ott_platforms'
 
 class Country(models.Model):
     name  = models.CharField(max_length=50)
-    films = models.ManyToManyField(Film, through='FilmCountry')
+    film  = models.ManyToManyField(Film, through='FilmCountry', related_name='countries')
 
     class Meta:
         db_table = 'countries'
-
-# 중간 테이블
 
 class FilmGenre(models.Model):
     film  = models.ForeignKey('Film', on_delete=models.CASCADE)

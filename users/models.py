@@ -1,13 +1,7 @@
 from django.db import models
 
 from films.models import Film
-
-class TimeStampModel(models.Model):
-    created_at  = models.DateTimeField(auto_now_add = True)
-    updated_at  = models.DateTimeField(auto_now = True)
-
-    class Meta:
-        abstract = True
+from core.models  import TimeStampModel
 
 class User(TimeStampModel):
     email         = models.CharField(max_length=80, unique=True)
@@ -19,16 +13,16 @@ class User(TimeStampModel):
         db_table = 'users'
 
 class WatchList(models.Model):
-    films      = models.ForeignKey(Film, on_delete=models.CASCADE)
-    users      = models.ForeignKey('User', on_delete=models.CASCADE)
+    film = models.ForeignKey(Film, on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'watch_lists'
 
 class Rate(models.Model):
     score = models.DecimalField(max_digits=2, decimal_places=1)
-    films = models.ForeignKey(Film, on_delete=models.CASCADE)
-    users = models.ForeignKey('User', on_delete=models.CASCADE)
+    film  = models.ForeignKey(Film, on_delete=models.CASCADE)
+    user  = models.ForeignKey('User', on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'rates'

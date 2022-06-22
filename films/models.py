@@ -5,10 +5,10 @@ from django.db import models
 
 class Film(models.Model):
     name             = models.CharField(max_length=100)
-    release_date     = models.DateField(null=True)
-    image_url        = models.URLField(null=True)
-    running_time_min = models.CharField(max_length=20, null=True)
-    descriptions     = models.CharField(max_length=500, null=True)
+    release_date     = models.DateField()
+    image_url        = models.URLField()
+    running_time_min = models.CharField(max_length=20, default='')
+    descriptions     = models.CharField(max_length=1000, default='')
     rating_systems   = models.ForeignKey('RatingSystem', on_delete=models.CASCADE)
 
     class Meta:
@@ -17,7 +17,7 @@ class Film(models.Model):
 # 일대다 관계 테이블
 
 class RatingSystem(models.Model):
-    rate = models.CharField(max_length=50, null=True)
+    rate = models.CharField(max_length=50, default='')
 
     class Meta:
         db_table = 'rating_systems'
@@ -32,34 +32,30 @@ class Genre(models.Model):
         db_table = 'genres'
 
 class Director(models.Model):
-
     name      = models.CharField(max_length=80)
-    image_url = models.URLField(null=True)
-    films = models.ManyToManyField(Film, through='FilmDirector')
+    image_url = models.URLField(default='')
+    films     = models.ManyToManyField(Film, through='FilmDirector')
 
     class Meta:
         db_table = 'directors'
 
 class Actor(models.Model):
-
     name      = models.CharField(max_length=80)
-    image_url = models.URLField(null=True)
-    films = models.ManyToManyField(Film, through='FilmActor')
+    image_url = models.URLField(default='')
+    films     = models.ManyToManyField(Film, through='FilmActor')
 
     class Meta:
         db_table = 'actors'
 
 class OttPlatform(models.Model):
-
-    name = models.CharField(max_length=50, null=True)
+    name  = models.CharField(max_length=50, default='')
     films = models.ManyToManyField(Film, through='FilmOttPlatForm')
 
     class Meta:
         db_table = 'ott_platforms'
 
 class Country(models.Model):
-
-    name = models.CharField(max_length=50)
+    name  = models.CharField(max_length=50)
     films = models.ManyToManyField(Film, through='FilmCountry')
 
     class Meta:

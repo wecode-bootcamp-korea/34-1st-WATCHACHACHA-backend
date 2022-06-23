@@ -35,6 +35,8 @@ class Director(models.Model):
 class Actor(models.Model):
     name      = models.CharField(max_length=80)
     image_url = models.URLField(default='')
+    role      = models.CharField(max_length=50, default='')
+    cast      = models.CharField(max_length=50, default='')
     film      = models.ManyToManyField(Film, through='FilmActor', related_name='actors')
 
     class Meta:

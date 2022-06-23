@@ -15,12 +15,15 @@ BIRTH_REGEX    = '^(19[0-9][0-9]|20[0-9][0-9])*-(0[1-9]|1[0-2])*-(0[1-9]|[1-2][0
 def validate_username(value):
     if not re.match(USERNAME_REGEX,value):
         raise ValidationError('INVALID_USERNAME')
+
 def validate_email(value):
     if not re.match(EMAIL_REGEX,value):
         raise ValidationError('INVALID_EMAIL')
+
 def validate_password(value):
     if not re.match(PASSWORD_REGEX,value):
         raise ValidationError('INVALID_PASSWORD')
+        
 def validate_birth(value):
     if not re.match(BIRTH_REGEX,value):
         raise ValidationError('INVALID_BIRTH')

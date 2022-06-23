@@ -9,7 +9,12 @@ from django.core.exceptions import ValidationError
 from django.conf            import settings
 
 from users.models       import User
-from users.validation   import validate_username, validate_email, validate_password, validate_birth
+from users.validation   import (
+    validate_username, 
+    validate_email, 
+    validate_password, 
+    validate_birth
+)
 
 class SignUpView(View):
     def post(self, request):
@@ -56,9 +61,7 @@ class SignInView(View):
             
             access_token = jwt.encode({"id" : user.id}, settings.SECRET_KEY, algorithm = settings.ALGORITHM)
 
-            return JsonResponse({
-                 "access_token" : access_token
-            }, status=200)
+            return JsonResponse({"access_token" : access_token}, status=200)
 
         except KeyError:
             return JsonResponse({'message':'KEY_ERROR'}, status=400)

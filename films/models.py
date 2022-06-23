@@ -35,12 +35,22 @@ class Director(models.Model):
 class Actor(models.Model):
     name      = models.CharField(max_length=80)
     image_url = models.URLField(default='')
-    role      = models.CharField(max_length=50, default='')
-    cast      = models.CharField(max_length=50, default='')
     film      = models.ManyToManyField(Film, through='FilmActor', related_name='actors')
 
     class Meta:
         db_table = 'actors'
+
+class Cast(models.Model):
+    name = models.CharField(max_length=80, default='')
+
+    class Meta:
+        db_table = 'casts'
+
+class Role(models.Model):
+    name = models.CharField(max_length=80, default='')
+
+    class Meta:
+        db_table = 'roles'
 
 class OttPlatform(models.Model):
     name  = models.CharField(max_length=50, default='')
@@ -73,6 +83,8 @@ class FilmDirector(models.Model):
 class FilmActor(models.Model):
     film  = models.ForeignKey('Film', on_delete=models.CASCADE)
     actor = models.ForeignKey('Actor', on_delete=models.CASCADE)
+    cast  = models.ForeignKey('Cast', on_delete=models.CASCADE, default='')
+    role  = models.ForeignKey('Role', on_delete=models.CASCADE, default='')
 
     class Meta:
         db_table = 'films_actors'

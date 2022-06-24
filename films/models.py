@@ -83,8 +83,8 @@ class FilmDirector(models.Model):
 class FilmActor(models.Model):
     film  = models.ForeignKey('Film', on_delete=models.CASCADE)
     actor = models.ForeignKey('Actor', on_delete=models.CASCADE)
-    cast  = models.ForeignKey('Cast', on_delete=models.CASCADE, default='')
-    role  = models.ForeignKey('Role', on_delete=models.CASCADE, default='')
+    cast  = models.ForeignKey('Cast', on_delete=models.CASCADE, null=True)
+    role  = models.ForeignKey('Role', on_delete=models.CASCADE, null=True)
 
     class Meta:
         db_table = 'films_actors'

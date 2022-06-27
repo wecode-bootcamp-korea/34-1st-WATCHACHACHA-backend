@@ -3,7 +3,7 @@ from django.db import models
 class Film(models.Model):
     name             = models.CharField(max_length=100)
     release_date     = models.DateField()
-    image_url        = models.URLField()
+    image_url        = models.CharField(max_length=1000, default='')
     running_time_min = models.IntegerField()
     description      = models.CharField(max_length=1000, default='')
     rating_system    = models.ForeignKey('RatingSystem', on_delete=models.CASCADE)
@@ -26,7 +26,7 @@ class Genre(models.Model):
 
 class Director(models.Model):
     name      = models.CharField(max_length=80)
-    image_url = models.URLField(default='')
+    image_url = models.CharField(max_length=1000, default='')
     film      = models.ManyToManyField(Film, through='FilmDirector', related_name='directors')
 
     class Meta:
@@ -34,7 +34,7 @@ class Director(models.Model):
 
 class Actor(models.Model):
     name      = models.CharField(max_length=80)
-    image_url = models.URLField(default='')
+    image_url = models.CharField(max_length=1000, default='')
     film      = models.ManyToManyField(Film, through='FilmActor', related_name='actors')
 
     class Meta:
@@ -83,8 +83,8 @@ class FilmDirector(models.Model):
 class FilmActor(models.Model):
     film  = models.ForeignKey('Film', on_delete=models.CASCADE)
     actor = models.ForeignKey('Actor', on_delete=models.CASCADE)
-    cast  = models.ForeignKey('Cast', on_delete=models.CASCADE, default='')
-    role  = models.ForeignKey('Role', on_delete=models.CASCADE, default='')
+    cast  = models.ForeignKey('Cast', on_delete=models.CASCADE, null=True)
+    role  = models.ForeignKey('Role', on_delete=models.CASCADE, null=True)
 
     class Meta:
         db_table = 'films_actors'

@@ -1,4 +1,4 @@
-import json 
+import json
 import re
 
 import bcrypt
@@ -10,9 +10,9 @@ from django.conf            import settings
 
 from users.models       import User
 from users.validation   import (
-    validate_username, 
-    validate_email, 
-    validate_password, 
+    validate_username,
+    validate_email,
+    validate_password,
     validate_birth
 )
 
@@ -27,15 +27,15 @@ class SignUpView(View):
             date_of_birth = data['date_of_birth']
 
             if User.objects.filter(email=email).exists():
-                return JsonResponse({"message" : "EMAIL_ALREADY_EXISTS"}, status=409)
+                return JsonResponse({'message' : 'EMAIL_ALREADY_EXISTS'}, status=409)
 
-            validate_username(username) 
-            validate_email(email) 
-            validate_password(password) 
-            validate_birth(date_of_birth) 
+            validate_username(username)
+            validate_email(email)
+            validate_password(password)
+            validate_birth(date_of_birth)
 
             hashed_password  = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-    
+
             User.objects.create(
                 username      = username,
                 email         = email,
@@ -48,7 +48,7 @@ class SignUpView(View):
             return JsonResponse({'message':'KEY_ERROR'}, status=400)
 
         except ValidationError as error:
-            return JsonResponse({"message": error.message}, status=400)
+            return JsonResponse({'message': error.message}, status=400)
 
 class SignInView(View):
     def post(self, request):
@@ -57,13 +57,13 @@ class SignInView(View):
             user = User.objects.get(email=data['email'])
 
             if not bcrypt.checkpw(data['password'].encode('utf-8'), user.password.encode('utf-8')):
-                return JsonResponse({"message" : "INVALID_USER"}, status=401)
-            
+                return JsonResponse({'message' : 'INVALID_USER'}, status=401)
+
             access_token = jwt.encode({"id" : user.id}, settings.SECRET_KEY, algorithm = settings.ALGORITHM)
 
-            return JsonResponse({"access_token" : access_token}, status=200)
+            return JsonResponse({'access_token' : access_token}, status=200)
 
         except KeyError:
             return JsonResponse({'message':'KEY_ERROR'}, status=400)
         except User.DoesNotExist:
-            return JsonResponse({"message" : "INVALID_USER"}, status=401)
+            return JsonResponse({'message': 'INVALID_USER'}, status=401)

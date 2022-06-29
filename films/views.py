@@ -1,5 +1,3 @@
-import json
-
 from django.http      import JsonResponse
 from django.views     import View
 from django.db.models import Q
@@ -47,15 +45,15 @@ class FilmView(View):
                     'country'          : [country.name for country in film.countries.all()],
                     'running_time_min' : film.running_time_min,
                 } for film in films]
-            return JsonResponse({'results': results}, status = 200)
+            return JsonResponse({'results' : results}, status = 200)
         except KeyError:
-            return JsonResponse({'message': 'KEY_ERROR'}, status = 400)
+            return JsonResponse({'message' : 'KEY_ERROR'}, status = 400)
 
 class FilmDetailView(View):
     def get(self, request, film_id):
         try:
-            film = Film.objects.get(id=film_id)
-            film = {
+            film    = Film.objects.get(id=film_id)
+            results = {
                 'id'               : film.id,
                 'name'             : film.name,
                 'release_date'     : film.release_date.year,
@@ -80,7 +78,6 @@ class FilmDetailView(View):
                     } for actor in film.filmactor_set.all()
                 ]
             }
-            return JsonResponse({'film': film}, status=200)
+            return JsonResponse({'results': results}, status=200)
         except Film.DoesNotExist:
             return JsonResponse({'message': 'FILM_DOES_NOT_EXIST'}, status=400)
-

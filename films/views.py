@@ -5,6 +5,8 @@ from django.views     import View
 from django.db.models import Q
 
 from films.models import Film
+from users.models import WatchList
+from core.utils import token_decorator
 
 class FilmView(View):
     def get(self, request):
@@ -55,7 +57,7 @@ class FilmDetailView(View):
     def get(self, request, film_id):
         try:
             film = Film.objects.get(id=film_id)
-            film = {
+            results = {
                 'id'               : film.id,
                 'name'             : film.name,
                 'release_date'     : film.release_date.year,
@@ -80,7 +82,21 @@ class FilmDetailView(View):
                     } for actor in film.filmactor_set.all()
                 ]
             }
-            return JsonResponse({'film': film}, status=200)
+            return JsonResponse({'results': results}, status=200)
+        except Film.DoesNotExist:
+            return JsonResponse({'message': 'FILM_DOES_NOT_EXIST'}, status=400)
+
+@token_decorator
+class ProfileFilmView(View):
+    def get(self, request, film_id):
+        try:
+            film = Film.objects.get(id=film_id)
+            watch_list = WatchList.objects.get(film_id=film_id)
+            results = {
+                'name'             : film.name,
+                'image_url'        : film.image_url
+            }
+            return JsonResponse({'results': results}, status=200)
         except Film.DoesNotExist:
             return JsonResponse({'message': 'FILM_DOES_NOT_EXIST'}, status=400)
 

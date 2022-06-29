@@ -27,10 +27,10 @@ class FilmDetailView(View):
                 ],
                 'actors' : [
                     {
-                        'name' : actor.actor.name,
+                        'name'      : actor.actor.name,
                         'image_url' : actor.actor.image_url,
-                        'cast' : actor.cast.name if actor.cast else None,
-                        'role' : actor.role.name
+                        'cast'      : actor.cast.name if actor.cast else None,
+                        'role'      : actor.role.name
                     } for actor in film.filmactor_set.all()
                 ]
             }

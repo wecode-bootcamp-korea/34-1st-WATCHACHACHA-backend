@@ -3,6 +3,8 @@ from django.views     import View
 from django.db.models import Q
 
 from films.models import Film
+from users.models import WatchList
+from core.utils import token_decorator
 
 class FilmView(View):
     def get(self, request):
@@ -52,7 +54,7 @@ class FilmView(View):
 class FilmDetailView(View):
     def get(self, request, film_id):
         try:
-            film    = Film.objects.get(id=film_id)
+            film = Film.objects.get(id=film_id)
             results = {
                 'id'               : film.id,
                 'name'             : film.name,

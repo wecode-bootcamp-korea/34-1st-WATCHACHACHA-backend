@@ -74,32 +74,61 @@ class WatchListView(View):
     @token_decorator
     def post(self, request, film_id):
         try:
-            film = Film.objects.get(id = film_id)
-            user = request.user
-
             if not Film.objects.filter(id = film_id).exists:
-                return JsonResponse({'message' : 'FILM_DOES_NOT_EXIST'}, status = 400)
+                return JsonResponse({'message' : 'FILM_DOES_NOT_EXIST'}, status = 404)
+            
+            user = request.user
+            film = Film.objects.get(id = film_id)
 
-            wish, flag = WatchList.objects.get_or_create(film = film, user = user)
+            wish, is_created = WatchList.objects.get_or_create(film = film, user = user)
 
-            if not flag:
+            if not is_created:
                 wish.delete()
                 return JsonResponse({'message' : 'WATCH_LIST_DELETED'}, status = 204)
+            
             return JsonResponse({'message' : 'SUCCESS'}, status = 201)
 
         except KeyError:
             return JsonResponse({'message' :'KEY_ERROR'}, status = 400)
+    
+    """
+    목적: user가 좋아요를 눌렀던 영화 목록 전달
 
-class ProfileView(View):
+    영화 목록인데, 조건: 특정 user가 좋아요를 누른
+
+    1. 영화 목록 : films  = Film.objects.filter()
+    2. 기존 영화 목록에 조건 추가 : films = Film.objects.filter(watchlist__user=user)
+    3. 가져온 데이터 가공
+    4. 데이터 전달
+    """
     @token_decorator
-    def get(self, request, user_id):
+    def get(self, request):
+        user  = request.user
+        films = Film.objects.filter(watchlist__user=user)
+        wishlist  = WatchList.obects.filter(user=user)
+
+        results = [{
+            'name'      : wish.film.name,
+            'image_url' : wish.film.image_url
+        } for wish in wishlist]
+        return JsonResponse({'results': results}, status=200)
+        
+        results = [{
+            'name'      : film.name,
+            'image_url' : film.image_url
+        } for film in films]
+        return JsonResponse({'results': results}, status=200)
+        
+class UserView(View):
+    @token_decorator
+    def get(self, request):
         try:
             user = request.user
 
+            
             results = {
-                'id'               : user.id,
                 'username'         : user.username,
-                'watch_list_count' : (''),
+                'watch_list_count' : user.watchlist_set.count(),
             }
             return JsonResponse({'results' : results})
 

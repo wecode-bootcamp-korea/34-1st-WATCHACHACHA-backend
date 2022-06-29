@@ -6,9 +6,9 @@ from django.http            import JsonResponse
 from django.views           import View
 from django.core.exceptions import ValidationError
 from django.conf            import settings
-from django.db.models       import Sum, Avg
 
 from users.models     import User, WatchList
+from films.models     import Film
 from users.validation import (
     validate_username,
     validate_email,
@@ -16,7 +16,6 @@ from users.validation import (
     validate_birth
 )
 from core.utils       import token_decorator
-from films.models     import Film
 
 class SignUpView(View):
     def post(self, request):
@@ -103,3 +102,18 @@ class WatchListView(View):
             'image_url'        : film.image_url
         } for film in films]
         return JsonResponse({'results': results}, status=200)
+
+class UserView(View):
+    @token_decorator
+    def get(self, request):
+        try:
+            user = request.user
+
+            results = {
+                'username'        : user.username,
+                'watchlist_count' : user.watchlist_set.count(),
+            }
+            return JsonResponse({'results' : results})
+
+        except KeyError:
+            return JsonResponse({'message' : 'KEY_ERROR'}, status = 400)

@@ -8,7 +8,7 @@ from django.views           import View
 from django.core.exceptions import ValidationError
 from django.conf            import settings
 
-from users.models       import User
+from users.models       import User, WatchList
 from users.validation   import (
     validate_username, 
     validate_email, 

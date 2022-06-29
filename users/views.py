@@ -72,36 +72,34 @@ class SignInView(View):
 
 class WatchListView(View):
     @token_decorator
-    def post(self, request, film_id):
+    def post(self, request):
         try:
-            film = Film.objects.get(id = film_id)
+            data = json.loads(request.body)
+
+            if not Film.objects.filter(id = data['film_id']).exists:
+                return JsonResponse({'message' : 'FILM_DOES_NOT_EXIST'}, status = 404)
+
+            film = Film.objects.get(id = data['film_id'])
             user = request.user
 
-            if not Film.objects.filter(id = film_id).exists:
-                return JsonResponse({'message' : 'FILM_DOES_NOT_EXIST'}, status = 400)
+            wish, is_created = WatchList.objects.get_or_create(film = film, user = user)
 
-            wish, flag = WatchList.objects.get_or_create(film = film, user = user)
-
-            if not flag:
+            if not is_created:
                 wish.delete()
                 return JsonResponse({'message' : 'WATCH_LIST_DELETED'}, status = 204)
+
             return JsonResponse({'message' : 'SUCCESS'}, status = 201)
 
         except KeyError:
             return JsonResponse({'message' :'KEY_ERROR'}, status = 400)
 
-class ProfileView(View):
     @token_decorator
-    def get(self, request, user_id):
-        try:
-            user = request.user
+    def get(self, request):
+        user = request.user
+        films = Film.objects.filter(watchlist__user=user)
 
-            results = {
-                'id'               : user.id,
-                'username'         : user.username,
-                'watch_list_count' : (''),
-            }
-            return JsonResponse({'results' : results})
-
-        except KeyError:
-            return JsonResponse({'message' : 'KEY_ERROR'}, status = 400)
+        results = [{
+            'name'             : film.name,
+            'image_url'        : film.image_url
+        } for film in films]
+        return JsonResponse({'results': results}, status=200)

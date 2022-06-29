@@ -17,9 +17,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('users', include('users.urls')),
-<<<<<<< HEAD
-    path('films', include('films.urls'))
-=======
     path('films', include('films.urls')),
->>>>>>> main
 ]

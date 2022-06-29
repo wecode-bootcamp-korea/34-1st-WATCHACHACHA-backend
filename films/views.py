@@ -15,7 +15,6 @@ class FilmView(View):
             offset = int(request.GET.get('offset', 0))
             limit  = int(request.GET.get('limit', 10))
 
-            print(sort)
             q = Q()
 
             if genre:

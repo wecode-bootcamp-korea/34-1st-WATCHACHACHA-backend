@@ -28,9 +28,9 @@ class FilmView(View):
 
             sort_set = {
                 'random'          : '?',
-                'ascending-time'  : 'running_time_min',
-                'descending-time' : '-running_time_min',
-                'score'           : 'rate_set__score'
+                'score'           : 'rate_set__score',
+                'time-ascending'  : 'running_time_min',
+                'time-descending' : '-running_time_min',
             }
 
             order_key = sort_set.get(sort, 'id')

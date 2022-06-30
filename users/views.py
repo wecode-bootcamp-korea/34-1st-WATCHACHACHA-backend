@@ -95,9 +95,22 @@ class WatchListView(View):
     @token_decorator
     def get(self, request):
         user = request.user
-        films = Film.objects.filter(watchlist__user=user)
+        sort = request.GET.get('sort')
+
+        sort_set = {
+            'film'            : 'id',
+            'random'          : '?',
+            'score'           : 'rate_set__score',
+            'time-ascending'  : 'running_time_min',
+            'time-descending' : '-running_time_min',
+        }
+
+        order_key = sort_set.get(sort, '-watchlist__id')
+
+        films = Film.objects.filter(watchlist__user=user).order_by(order_key)
 
         results = [{
+            'id'               : film.id,
             'name'             : film.name,
             'image_url'        : film.image_url
         } for film in films]

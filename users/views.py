@@ -98,6 +98,7 @@ class WatchListView(View):
         films = Film.objects.filter(watchlist__user=user)
 
         results = [{
+            'id'               : film.id,
             'name'             : film.name,
             'image_url'        : film.image_url
         } for film in films]

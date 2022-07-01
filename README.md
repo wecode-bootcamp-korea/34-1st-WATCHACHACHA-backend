@@ -20,10 +20,11 @@
 
 ## 자료
 ---
+
 ### 사진
 <img width="643" alt="Screen Shot 2022-07-01 at 3 59 11 PM" src="https://user-images.githubusercontent.com/102043891/176841574-5d68d365-7687-4a9e-85e7-c83464240429.png">
+
 ### 영상
----
 [데모 영상](https://www.notion.so/ded2dbffac2140609d15bc3877219332)
 
 <br>

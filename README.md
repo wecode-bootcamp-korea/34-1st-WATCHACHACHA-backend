@@ -31,18 +31,17 @@ PROJECT : Watcha Classic
 - ERD를 실제 model에 적용
 - csv file to MySQL (보조)
 - token decorator 구현
-- 메인 페이지 API 구현(GET)
-- 프로필 페이지 API 구현(GET)
-- 보고 싶어요 API 구현(GET, POST, DELETE)
+- 메인 페이지(FilmView) API 구현(GET)
+- 프로필 페이지(UserView) API 구현(GET)
+- 보고 싶어요(WatchListView) API 구현(GET, POST, DELETE)
 
 **[박민하](https://github.com/miracle-21)**
 - dbdiagram을 이용한 데이터 모델링 (보조)
 - csv file to MySQL (중심)
-- 회원가입 API 구현 (POST)
-- 로그인 API 구현 (POST)
+- 회원가입(SignupView) API 구현(POST)
+- 로그인(SigninView) API 구현(POST)
 - 로그인/회원가입 유효성 검사
-- 상세 페이지 API 구현 (GET)
-- 프로필의 보고 싶어요 페이지 API 구현 (GET)
+- 상세 페이지(FilmDetailView) API 구현(GET)
 
 ## 💻 Backend 기술 스택
 
